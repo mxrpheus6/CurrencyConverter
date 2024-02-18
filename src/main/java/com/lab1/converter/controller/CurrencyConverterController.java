@@ -56,10 +56,10 @@ public class CurrencyConverterController {
         }
     }
 
-    @GetMapping("/conversion")
-    public ConvertRestResponse restConvert(@RequestParam String fromCurrency,
-                                           @RequestParam double amount,
-                                           @RequestParam String toCurrency) {
+    @GetMapping("/convertor/from/{fromCurrency}/amount/{amount}/to/{toCurrency}")
+    public ConvertRestResponse restConvert(@PathVariable String fromCurrency,
+                                           @PathVariable double amount,
+                                           @PathVariable String toCurrency) {
         ConvertRestResponse result = new ConvertRestResponse();
         result.setFromCurrency(fromCurrency.toUpperCase());
         result.setAmount(amount);
