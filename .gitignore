@@ -32,3 +32,9 @@ pom.xml
 
 ### VS Code ###
 .vscode/
+
+### Maven ###
+mvnw
+mvnw.cmd
+pom.xml
+.mvn/*
