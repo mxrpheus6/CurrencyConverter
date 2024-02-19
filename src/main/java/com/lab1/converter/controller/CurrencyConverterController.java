@@ -66,11 +66,3 @@ public class CurrencyConverterController {
         return result;
     }
 }
-/*
-repo не в контроллере
-норм названия
-использование dto
-зачем static
-
-request body
- */

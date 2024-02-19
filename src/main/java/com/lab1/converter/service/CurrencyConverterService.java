@@ -19,11 +19,10 @@ public class CurrencyConverterService {
         this.currencyConverterRepository = currencyConverterRepository;
     }
 
-    private final String API_URL = "https://v6.exchangerate-api.com/v6/d6d8a4004c4b9d619b477865";
-
     public double convertCurrency(String fromCurrency, double amount, String toCurrency) {
         RestTemplate restTemplate = new RestTemplate();
-        String fullApiUrl = API_URL + "/pair/" + fromCurrency.toUpperCase() + "/" + toCurrency.toUpperCase() + "/" + amount;
+        String apiUrl = "https://v6.exchangerate-api.com/v6/d6d8a4004c4b9d619b477865";
+        String fullApiUrl = apiUrl + "/pair/" + fromCurrency.toUpperCase() + "/" + toCurrency.toUpperCase() + "/" + amount;
         try {
             ConversionResponseModel response = restTemplate.getForObject(fullApiUrl, ConversionResponseModel.class);
             if (response != null) {
