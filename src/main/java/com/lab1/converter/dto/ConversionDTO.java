@@ -1,21 +1,27 @@
-package com.lab1.converter.entity;
+package com.lab1.converter.dto;
 
-import jakarta.persistence.*;
+import com.lab1.converter.entity.Conversion;
 
-@Entity
-public class CurrencyConverterEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ConversionDTO {
     private Long id;
-
+    private UserDTO user;
     private String fromCurrency;
-
     private double amount;
-
     private String toCurrency;
-
     private double convertedAmount;
+
+    public static ConversionDTO toModel(Conversion conversion) {
+        ConversionDTO model = new ConversionDTO();
+
+        model.setId(conversion.getId());
+        model.setUser(UserDTO.toModel(conversion.getUser()));
+        model.setFromCurrency(conversion.getFromCurrency());
+        model.setAmount(conversion.getAmount());
+        model.setToCurrency(conversion.getToCurrency());
+        model.setConvertedAmount(conversion.getConvertedAmount());
+
+        return model;
+    }
 
     public Long getId() {
         return id;
@@ -23,6 +29,14 @@ public class CurrencyConverterEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UserDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
     public String getFromCurrency() {
