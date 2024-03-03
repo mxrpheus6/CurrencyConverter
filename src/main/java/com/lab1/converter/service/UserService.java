@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final String ERROR_USER_NOT_FOUND = "User not found";
+    private static final String ERROR_USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 public class ConversionService {
-    private final String ERROR_CONVERSION_NOT_FOUND = "Conversion not found";
+    private static final String ERROR_CONVERSION_NOT_FOUND = "Conversion not found";
 
     private final ConversionRepository conversionRepository;
     private final UserService userService;
