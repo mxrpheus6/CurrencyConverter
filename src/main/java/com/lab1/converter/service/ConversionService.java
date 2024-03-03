@@ -17,6 +17,7 @@ import java.util.List;
 
 @Service
 public class ConversionService {
+    private final String ERROR_CONVERSION_NOT_FOUND = "Conversion not found";
 
     private final ConversionRepository conversionRepository;
     private final UserService userService;
@@ -38,13 +39,13 @@ public class ConversionService {
     }
 
     public ConversionDTO getConversionById(Long id) throws ConversionNotFoundException {
-        Conversion conversion = conversionRepository.findById(id).orElseThrow(() -> new ConversionNotFoundException("Conversion not found"));
+        Conversion conversion = conversionRepository.findById(id).orElseThrow(() -> new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND));
         return ConversionDTO.toModel(conversion);
     }
 
     public ConversionDTO updateConversion(Long id, Conversion updatedConversion) throws ConversionNotFoundException {
         if (!conversionRepository.existsById(id))
-            throw new ConversionNotFoundException("Conversion not found");
+            throw new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND);
 
         updatedConversion.setId(id);
         return ConversionDTO.toModel(conversionRepository.save(updatedConversion));
@@ -52,7 +53,7 @@ public class ConversionService {
 
     public void deleteConversion(Long id) throws ConversionNotFoundException {
         if (!conversionRepository.existsById(id))
-            throw new ConversionNotFoundException("Conversion not found");
+            throw new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND);
         conversionRepository.deleteById(id);
     }
 

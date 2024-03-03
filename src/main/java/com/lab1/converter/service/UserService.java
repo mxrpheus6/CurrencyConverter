@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private final String ERROR_USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
 
@@ -34,13 +35,13 @@ public class UserService {
 
     @Transactional
     public UserDTO getUserById(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(ERROR_USER_NOT_FOUND));
         return UserDTO.toModel(user);
     }
 
     public UserDTO updateUser(Long id, User updatedUser) throws UserNotFoundException {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(ERROR_USER_NOT_FOUND);
         }
         updatedUser.setId(id);
         return UserDTO.toModel(userRepository.save(updatedUser));
@@ -48,7 +49,7 @@ public class UserService {
 
     public void deleteUser(Long id) throws UserNotFoundException {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User not found");
+            throw new UserNotFoundException(ERROR_USER_NOT_FOUND);
         }
         userRepository.deleteById(id);
     }
