@@ -9,13 +9,13 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Conversion> conversions;
+    @OneToMany(mappedBy = "user")
+    private List<ConversionHistory> conversionHistories;
 
     public Long getId() {
         return id;
@@ -41,11 +41,11 @@ public class User {
         this.email = email;
     }
 
-    public List<Conversion> getConversions() {
-        return conversions;
+    public List<ConversionHistory> getConversions() {
+        return conversionHistories;
     }
 
-    public void setConversions(List<Conversion> conversions) {
-        this.conversions = conversions;
+    public void setConversions(List<ConversionHistory> conversionHistories) {
+        this.conversionHistories = conversionHistories;
     }
 }

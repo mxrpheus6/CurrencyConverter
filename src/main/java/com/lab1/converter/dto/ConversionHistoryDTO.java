@@ -1,24 +1,28 @@
 package com.lab1.converter.dto;
 
-import com.lab1.converter.entity.Conversion;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.lab1.converter.entity.ConversionHistory;
 
-public class ConversionDTO {
+public class ConversionHistoryDTO {
     private Long id;
+
+    @JsonIgnoreProperties("conversions")
     private UserDTO user;
+
     private String fromCurrency;
     private double amount;
     private String toCurrency;
     private double convertedAmount;
 
-    public static ConversionDTO toModel(Conversion conversion) {
-        ConversionDTO model = new ConversionDTO();
+    public static ConversionHistoryDTO toModel(ConversionHistory conversionHistory) {
+        ConversionHistoryDTO model = new ConversionHistoryDTO();
 
-        model.setId(conversion.getId());
-        model.setUser(UserDTO.toModel(conversion.getUser()));
-        model.setFromCurrency(conversion.getFromCurrency());
-        model.setAmount(conversion.getAmount());
-        model.setToCurrency(conversion.getToCurrency());
-        model.setConvertedAmount(conversion.getConvertedAmount());
+        model.setId(conversionHistory.getId());
+        model.setUser(UserDTO.toModel(conversionHistory.getUser()));
+        model.setFromCurrency(conversionHistory.getFromCurrency());
+        model.setAmount(conversionHistory.getAmount());
+        model.setToCurrency(conversionHistory.getToCurrency());
+        model.setConvertedAmount(conversionHistory.getConvertedAmount());
 
         return model;
     }

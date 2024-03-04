@@ -8,8 +8,8 @@ This is a basic REST API application built using [Spring Boot](https://spring.io
 
 ## Features
 
-- Get currency conversion with updated rates.
-- Store conversion data in a database.
+- Get currency conversionHistory with updated rates.
+- Store conversionHistory data in a database.
 
 ## Technologies Used
 

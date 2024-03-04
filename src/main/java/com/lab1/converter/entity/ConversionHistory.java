@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "conversion_history")
-public class Conversion {
+public class ConversionHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,14 +14,6 @@ public class Conversion {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     private String fromCurrency;
 
     private double amount;
@@ -29,6 +21,14 @@ public class Conversion {
     private String toCurrency;
 
     private double convertedAmount;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

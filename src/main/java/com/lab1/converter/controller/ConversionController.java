@@ -1,67 +1,79 @@
 package com.lab1.converter.controller;
 
-import com.lab1.converter.dto.ConversionDTO;
-import com.lab1.converter.entity.Conversion;
+import com.lab1.converter.dto.ConversionHistoryDTO;
+import com.lab1.converter.entity.ConversionHistory;
+import com.lab1.converter.entity.Currency;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
+import com.lab1.converter.exceptions.CurrencyNotFoundException;
 import com.lab1.converter.exceptions.UserNotFoundException;
+import com.lab1.converter.service.CurrencyService;
 import com.lab1.converter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.lab1.converter.service.ConversionService;
+import com.lab1.converter.service.ConversionHistoryService;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/conversions")
 public class ConversionController {
 
-    private final ConversionService conversionService;
+    private final ConversionHistoryService conversionHistoryService;
     private final UserService userService;
+    private final CurrencyService currencyService;
 
     @Autowired
-    public ConversionController(ConversionService currencyConverterService, UserService userService) {
-        this.conversionService = currencyConverterService;
+    public ConversionController(ConversionHistoryService currencyConverterService, CurrencyService currencyService, UserService userService) {
+        this.conversionHistoryService = currencyConverterService;
         this.userService = userService;
+        this.currencyService = currencyService;
     }
 
     @PostMapping("/create")
-    public ConversionDTO createConversion(@RequestBody Conversion conversion)  {
-        return conversionService.createConversion(conversion);
+    public ConversionHistoryDTO createConversion(@RequestBody ConversionHistory conversionHistory)  {
+        return conversionHistoryService.createConversion(conversionHistory);
     }
 
     @GetMapping
-    public Iterable<ConversionDTO> getAllConversions() {
-        return conversionService.getAllConversions();
+    public Iterable<ConversionHistoryDTO> getAllConversions() {
+        return conversionHistoryService.getAllConversions();
     }
 
     @GetMapping("/{id}")
-    public ConversionDTO getConversionById(@PathVariable Long id) throws ConversionNotFoundException {
-        return conversionService.getConversionById(id);
+    public ConversionHistoryDTO getConversionById(@PathVariable Long id) throws ConversionNotFoundException {
+        return conversionHistoryService.getConversionById(id);
     }
 
     @PutMapping("/update/{id}")
-    public ConversionDTO updateConversion(@PathVariable Long id, @RequestBody Conversion conversion) throws ConversionNotFoundException {
-        return conversionService.updateConversion(id, conversion);
+    public ConversionHistoryDTO updateConversion(@PathVariable Long id, @RequestBody ConversionHistory conversionHistory) throws ConversionNotFoundException {
+        return conversionHistoryService.updateConversion(id, conversionHistory);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteConversion(@PathVariable Long id) throws ConversionNotFoundException {
-        conversionService.deleteConversion(id);
+        conversionHistoryService.deleteConversion(id);
     }
 
     @GetMapping("/convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency}")
     public Map<String, Object> restConvert(@PathVariable Long userId,
                                            @PathVariable String fromCurrency,
                                            @PathVariable double amount,
-                                           @PathVariable String toCurrency) throws UserNotFoundException {
+                                           @PathVariable String toCurrency) throws UserNotFoundException, CurrencyNotFoundException {
+
+        Currency from = currencyService.getCurrencyByCode(fromCurrency.toUpperCase());
+        Currency to = currencyService.getCurrencyByCode(toCurrency.toUpperCase());
+
+        if (from == null || to == null) {
+            throw new CurrencyNotFoundException("Currency Not Found");
+        }
+
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("userId", userId);
         result.put("fromCurrency", fromCurrency.toUpperCase());
         result.put("amount", amount);
         result.put("toCurrency", toCurrency.toUpperCase());
-        result.put("convertedAmount", conversionService.convertCurrency(userId, fromCurrency, amount, toCurrency));
+        result.put("convertedAmount", conversionHistoryService.convertCurrency(userId, fromCurrency, amount, toCurrency));
 
         return result;
     }

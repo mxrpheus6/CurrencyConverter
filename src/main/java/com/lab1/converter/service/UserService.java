@@ -1,11 +1,10 @@
 package com.lab1.converter.service;
 
-import com.lab1.converter.dao.ConversionRepository;
+import com.lab1.converter.dao.ConversionHistoryRepository;
 import com.lab1.converter.dao.UserRepository;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.User;
 import com.lab1.converter.exceptions.UserNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(ConversionRepository conversionRepository, UserRepository userRepository) {
+    public UserService(ConversionHistoryRepository conversionHistoryRepository, UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -33,7 +32,6 @@ public class UserService {
         return userDTOList;
     }
 
-    @Transactional
     public UserDTO getUserById(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(ERROR_USER_NOT_FOUND));
         return UserDTO.toModel(user);

@@ -1,7 +1,7 @@
 package com.lab1.converter.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.lab1.converter.entity.Conversion;
+import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.User;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class UserDTO {
     private String email;
 
     @JsonIgnoreProperties("user")
-    private List<Conversion> conversions = new ArrayList<>();
+    private List<ConversionHistory> conversions = new ArrayList<>();
 
     public static UserDTO toModel(User user) {
         UserDTO model = new UserDTO();
@@ -23,8 +23,8 @@ public class UserDTO {
         model.setEmail(user.getEmail());
 
         if (user.getConversions() != null) {
-            List<Conversion> conversionCopy = new ArrayList<>(user.getConversions());
-            model.setConversions(conversionCopy);
+            List<ConversionHistory> conversionsCopy = new ArrayList<>(user.getConversions());
+            model.setConversions(conversionsCopy);
         }
 
         return model;
@@ -63,11 +63,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public List<Conversion> getConversions() {
+    public List<ConversionHistory> getConversions() {
         return conversions;
     }
 
-    public void setConversions(List<Conversion> conversions) {
+    public void setConversions(List<ConversionHistory> conversions) {
         this.conversions = conversions;
     }
 }

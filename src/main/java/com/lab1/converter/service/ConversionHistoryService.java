@@ -1,12 +1,12 @@
 package com.lab1.converter.service;
 
-import com.lab1.converter.dto.ConversionDTO;
+import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.dto.UserDTO;
-import com.lab1.converter.entity.Conversion;
+import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
 import com.lab1.converter.exceptions.UserNotFoundException;
 import com.lab1.converter.model.ConversionResponseModel;
-import com.lab1.converter.dao.ConversionRepository;
+import com.lab1.converter.dao.ConversionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,45 +16,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ConversionService {
+public class ConversionHistoryService {
     private static final String ERROR_CONVERSION_NOT_FOUND = "Conversion not found";
 
-    private final ConversionRepository conversionRepository;
+    private final ConversionHistoryRepository conversionHistoryRepository;
     private final UserService userService;
 
     @Autowired
-    public ConversionService(ConversionRepository conversionRepository, UserService userService) {
-        this.conversionRepository = conversionRepository;
+    public ConversionHistoryService(ConversionHistoryRepository conversionHistoryRepository, UserService userService) {
+        this.conversionHistoryRepository = conversionHistoryRepository;
         this.userService = userService;
     }
 
-    public ConversionDTO createConversion(Conversion conversion) {
-        return ConversionDTO.toModel(conversionRepository.save(conversion));
+    public ConversionHistoryDTO createConversion(ConversionHistory conversionHistory) {
+        return ConversionHistoryDTO.toModel(conversionHistoryRepository.save(conversionHistory));
     }
 
-    public Iterable<ConversionDTO> getAllConversions() {
-        List<ConversionDTO> conversionDTOList = new ArrayList<>();
-        conversionRepository.findAll().forEach(conversion -> conversionDTOList.add(ConversionDTO.toModel(conversion)));
-        return conversionDTOList;
+    public Iterable<ConversionHistoryDTO> getAllConversions() {
+        List<ConversionHistoryDTO> conversionHistoryDTOList = new ArrayList<>();
+        conversionHistoryRepository.findAll().forEach(conversion -> conversionHistoryDTOList.add(ConversionHistoryDTO.toModel(conversion)));
+        return conversionHistoryDTOList;
     }
 
-    public ConversionDTO getConversionById(Long id) throws ConversionNotFoundException {
-        Conversion conversion = conversionRepository.findById(id).orElseThrow(() -> new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND));
-        return ConversionDTO.toModel(conversion);
+    public ConversionHistoryDTO getConversionById(Long id) throws ConversionNotFoundException {
+        ConversionHistory conversionHistory = conversionHistoryRepository.findById(id).orElseThrow(() -> new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND));
+        return ConversionHistoryDTO.toModel(conversionHistory);
     }
 
-    public ConversionDTO updateConversion(Long id, Conversion updatedConversion) throws ConversionNotFoundException {
-        if (!conversionRepository.existsById(id))
+    public ConversionHistoryDTO updateConversion(Long id, ConversionHistory updatedConversionHistory) throws ConversionNotFoundException {
+        if (!conversionHistoryRepository.existsById(id))
             throw new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND);
 
-        updatedConversion.setId(id);
-        return ConversionDTO.toModel(conversionRepository.save(updatedConversion));
+        updatedConversionHistory.setId(id);
+        return ConversionHistoryDTO.toModel(conversionHistoryRepository.save(updatedConversionHistory));
     }
 
     public void deleteConversion(Long id) throws ConversionNotFoundException {
-        if (!conversionRepository.existsById(id))
+        if (!conversionHistoryRepository.existsById(id))
             throw new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND);
-        conversionRepository.deleteById(id);
+        conversionHistoryRepository.deleteById(id);
     }
 
     public double convertCurrency(Long userId, String fromCurrency, double amount, String toCurrency) throws UserNotFoundException {
@@ -84,12 +84,12 @@ public class ConversionService {
     }
 
     private void saveConversionToDatabase(Long userId, String fromCurrency, double amount, String toCurrency, ConversionResponseModel response) throws UserNotFoundException {
-        Conversion conversion = new Conversion();
-        conversion.setFromCurrency(fromCurrency.toUpperCase());
-        conversion.setUser(UserDTO.toEntity(userService.getUserById(userId)));
-        conversion.setAmount(amount);
-        conversion.setToCurrency(toCurrency.toUpperCase());
-        conversion.setConvertedAmount(response.getConversionResult());
-        conversionRepository.save(conversion);
+        ConversionHistory conversionHistory = new ConversionHistory();
+        conversionHistory.setFromCurrency(fromCurrency.toUpperCase());
+        conversionHistory.setUser(UserDTO.toEntity(userService.getUserById(userId)));
+        conversionHistory.setAmount(amount);
+        conversionHistory.setToCurrency(toCurrency.toUpperCase());
+        conversionHistory.setConvertedAmount(response.getConversionResult());
+        conversionHistoryRepository.save(conversionHistory);
     }
 }
