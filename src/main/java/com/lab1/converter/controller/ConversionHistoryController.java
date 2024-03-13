@@ -1,6 +1,9 @@
 package com.lab1.converter.controller;
 
+import com.lab1.converter.cache.ConversionHistoryCache;
+import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
+import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.Currency;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
@@ -13,25 +16,33 @@ import org.springframework.web.bind.annotation.*;
 import com.lab1.converter.service.ConversionHistoryService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/conversions")
-public class ConversionController {
+public class ConversionHistoryController {
 
     private final ConversionHistoryService conversionHistoryService;
+    private final ConversionHistoryCache conversionHistoryCache;
     private final UserService userService;
     private final CurrencyService currencyService;
 
     @Autowired
-    public ConversionController(ConversionHistoryService currencyConverterService, CurrencyService currencyService, UserService userService) {
+    public ConversionHistoryController(ConversionHistoryService currencyConverterService,
+                                       ConversionHistoryCache conversionHistoryCache,
+                                       CurrencyService currencyService,
+                                       UserService userService) {
         this.conversionHistoryService = currencyConverterService;
+        this.conversionHistoryCache = conversionHistoryCache;
         this.userService = userService;
         this.currencyService = currencyService;
     }
 
     @PostMapping("/create")
     public ConversionHistoryDTO createConversion(@RequestBody ConversionHistory conversionHistory)  {
+        ConversionHistoryDTO createdConversion = conversionHistoryService.createConversion(conversionHistory);
+        conversionHistoryCache.put(conversionHistory.getId().intValue(), createdConversion);
         return conversionHistoryService.createConversion(conversionHistory);
     }
 
@@ -40,23 +51,37 @@ public class ConversionController {
         return conversionHistoryService.getAllConversions();
     }
 
+    @GetMapping("useful/{userId}")
+    public List<ConversionHistoryBaseDTO> getConversionsByUserId(@PathVariable Long userId) {
+        return conversionHistoryService.getConversionsByUserId(userId);
+    }
+
     @GetMapping("/{id}")
     public ConversionHistoryDTO getConversionById(@PathVariable Long id) throws ConversionNotFoundException {
-        return conversionHistoryService.getConversionById(id);
+        if (conversionHistoryCache.contains(id.intValue())) {
+            return conversionHistoryCache.get(id.intValue());
+        } else {
+            ConversionHistoryDTO conversionDTO = conversionHistoryService.getConversionById(id);
+            conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
+            return conversionDTO;
+        }
     }
 
     @PutMapping("/update/{id}")
     public ConversionHistoryDTO updateConversion(@PathVariable Long id, @RequestBody ConversionHistory conversionHistory) throws ConversionNotFoundException {
-        return conversionHistoryService.updateConversion(id, conversionHistory);
+        ConversionHistoryDTO updatedConversionDTO = conversionHistoryService.updateConversion(id, conversionHistory);
+        conversionHistoryCache.put(updatedConversionDTO.getId().intValue(), updatedConversionDTO);
+        return updatedConversionDTO;
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteConversion(@PathVariable Long id) throws ConversionNotFoundException {
         conversionHistoryService.deleteConversion(id);
+        conversionHistoryCache.remove(id.intValue());
     }
 
     @GetMapping("/convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency}")
-    public Map<String, Object> restConvert(@PathVariable Long userId,
+    public ConversionHistoryDTO restConvert(@PathVariable Long userId,
                                            @PathVariable String fromCurrency,
                                            @PathVariable double amount,
                                            @PathVariable String toCurrency) throws UserNotFoundException, CurrencyNotFoundException {
@@ -68,13 +93,10 @@ public class ConversionController {
             throw new CurrencyNotFoundException("Currency Not Found");
         }
 
-        Map<String, Object> result = new LinkedHashMap<>();
-        result.put("userId", userId);
-        result.put("fromCurrency", fromCurrency.toUpperCase());
-        result.put("amount", amount);
-        result.put("toCurrency", toCurrency.toUpperCase());
-        result.put("convertedAmount", conversionHistoryService.convertCurrency(userId, fromCurrency, amount, toCurrency));
+        ConversionHistory conversion = conversionHistoryService.convertCurrency(userId, fromCurrency, amount, toCurrency);
+        ConversionHistoryDTO conversionDTO = ConversionHistoryDTO.toModel(conversion);
 
-        return result;
+        conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
+        return conversionDTO;
     }
 }

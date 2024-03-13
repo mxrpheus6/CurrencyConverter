@@ -1,5 +1,6 @@
 package com.lab1.converter.service;
 
+import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
@@ -38,6 +39,14 @@ public class ConversionHistoryService {
         return conversionHistoryDTOList;
     }
 
+    public List<ConversionHistoryBaseDTO> getConversionsByUserId(Long userId) {
+        List<ConversionHistoryBaseDTO> conversionHistoryBaseDTO = new ArrayList<>();
+        for (ConversionHistory conversionHistory : conversionHistoryRepository.findConversionsByUserId(userId)) {
+            conversionHistoryBaseDTO.add(ConversionHistoryBaseDTO.toModel(conversionHistory));
+        }
+        return conversionHistoryBaseDTO;
+    }
+
     public ConversionHistoryDTO getConversionById(Long id) throws ConversionNotFoundException {
         ConversionHistory conversionHistory = conversionHistoryRepository.findById(id).orElseThrow(() -> new ConversionNotFoundException(ERROR_CONVERSION_NOT_FOUND));
         return ConversionHistoryDTO.toModel(conversionHistory);
@@ -57,7 +66,7 @@ public class ConversionHistoryService {
         conversionHistoryRepository.deleteById(id);
     }
 
-    public double convertCurrency(Long userId, String fromCurrency, double amount, String toCurrency) throws UserNotFoundException {
+    public ConversionHistory convertCurrency(Long userId, String fromCurrency, double amount, String toCurrency) throws UserNotFoundException {
         try {
             userService.getUserById(userId);
         }
@@ -71,11 +80,10 @@ public class ConversionHistoryService {
         try {
             ConversionResponseModel response = restTemplate.getForObject(fullApiUrl, ConversionResponseModel.class);
             if (response != null) {
-                saveConversionToDatabase(userId, fromCurrency, amount, toCurrency, response);
-                return response.getConversionResult();
+                return saveConversionToDatabase(userId, fromCurrency, amount, toCurrency, response);
             }
             else
-                return -1;
+                return null;
         } catch (HttpClientErrorException.NotFound e) {
             throw e;
         } catch (Exception e) {
@@ -83,7 +91,7 @@ public class ConversionHistoryService {
         }
     }
 
-    private void saveConversionToDatabase(Long userId, String fromCurrency, double amount, String toCurrency, ConversionResponseModel response) throws UserNotFoundException {
+    private ConversionHistory saveConversionToDatabase(Long userId, String fromCurrency, double amount, String toCurrency, ConversionResponseModel response) throws UserNotFoundException {
         ConversionHistory conversionHistory = new ConversionHistory();
         conversionHistory.setFromCurrency(fromCurrency.toUpperCase());
         conversionHistory.setUser(UserDTO.toEntity(userService.getUserById(userId)));
@@ -91,5 +99,6 @@ public class ConversionHistoryService {
         conversionHistory.setToCurrency(toCurrency.toUpperCase());
         conversionHistory.setConvertedAmount(response.getConversionResult());
         conversionHistoryRepository.save(conversionHistory);
+        return conversionHistory;
     }
 }

@@ -10,8 +10,7 @@ public class Currency {
     private Long id;
     private String code;
     private double rate;
-
-
+    
     public Long getId() {
         return id;
     }

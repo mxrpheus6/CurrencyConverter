@@ -14,7 +14,7 @@ public class User {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ConversionHistory> conversionHistories;
 
     public Long getId() {
