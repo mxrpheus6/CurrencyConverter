@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class ConversionHistoryService {
     private static final String ERROR_CONVERSION_NOT_FOUND = "Conversion not found";
+    private static final String error = "Conversion not found";
 
     private final ConversionHistoryRepository conversionHistoryRepository;
     private final UserService userService;
