@@ -33,7 +33,7 @@ public class ConversionHistoryService {
         return ConversionHistoryDTO.toModel(conversionHistoryRepository.save(conversionHistory));
     }
 
-    public Iterable<ConversionHistoryDTO> getAllConversions() {
+    public List<ConversionHistoryDTO> getAllConversions() {
         List<ConversionHistoryDTO> conversionHistoryDTOList = new ArrayList<>();
         conversionHistoryRepository.findAll().forEach(conversion -> conversionHistoryDTOList.add(ConversionHistoryDTO.toModel(conversion)));
         return conversionHistoryDTOList;

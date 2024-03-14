@@ -3,7 +3,6 @@ package com.lab1.converter.controller;
 import com.lab1.converter.cache.ConversionHistoryCache;
 import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
-import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.Currency;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
@@ -15,9 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.lab1.converter.service.ConversionHistoryService;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/conversions")
@@ -47,8 +45,12 @@ public class ConversionHistoryController {
     }
 
     @GetMapping
-    public Iterable<ConversionHistoryDTO> getAllConversions() {
-        return conversionHistoryService.getAllConversions();
+    public List<ConversionHistoryDTO> getAllConversions() {
+        List<ConversionHistoryDTO> conversionHistoryDTOList = conversionHistoryService.getAllConversions();
+        for (ConversionHistoryDTO conversionDTO: conversionHistoryDTOList) {
+            conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
+        }
+        return conversionHistoryDTOList;
     }
 
     @GetMapping("useful/{userId}")
