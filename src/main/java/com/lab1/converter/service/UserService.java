@@ -1,6 +1,5 @@
 package com.lab1.converter.service;
 
-import com.lab1.converter.dao.ConversionHistoryRepository;
 import com.lab1.converter.dao.UserRepository;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.User;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private static final String ERROR_USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
 
@@ -26,29 +24,31 @@ public class UserService {
         return UserDTO.toModel(userRepository.save(user));
     }
 
-    public Iterable<UserDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         List<UserDTO> userDTOList = new ArrayList<>();
         userRepository.findAll().forEach(user -> userDTOList.add(UserDTO.toModel(user)));
         return userDTOList;
     }
 
-    public UserDTO getUserById(Long id) throws UserNotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(ERROR_USER_NOT_FOUND));
+    public UserDTO getUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         return UserDTO.toModel(user);
     }
 
-    public UserDTO updateUser(Long id, User updatedUser) throws UserNotFoundException {
+    public UserDTO updateUser(Long id, User updatedUser) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(ERROR_USER_NOT_FOUND);
+            throw new UserNotFoundException(id);
         }
+
         updatedUser.setId(id);
         return UserDTO.toModel(userRepository.save(updatedUser));
     }
 
-    public void deleteUser(Long id) throws UserNotFoundException {
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(ERROR_USER_NOT_FOUND);
+            throw new UserNotFoundException(id);
         }
+
         userRepository.deleteById(id);
     }
 }

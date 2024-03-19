@@ -1,0 +1,10 @@
+2024-03-20 00:04:56,880 INFO  --- c.l.c.controller.CurrencyController : Currency rates are updated
+2024-03-20 00:05:08,558 INFO  --- c.l.c.c.ConversionHistoryController : DELETE endpoint /conversions/delete/{id} was called
+2024-03-20 00:05:09,221 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 404 - Conversion with id=1752 not found
+2024-03-20 00:05:38,820 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 404 - No endpoint GET /abc.
+2024-03-20 00:05:49,196 INFO  --- c.l.c.c.ConversionHistoryController : GET endpoint /conversions//convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency} was called
+2024-03-20 00:05:49,256 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 404 - Currency with code=BYNN not found
+2024-03-20 00:05:55,536 INFO  --- c.l.c.controller.UserController : GET endpoint /users/{id} was called
+2024-03-20 00:06:04,602 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 405 - Request method 'POST' is not supported
+2024-03-20 00:06:12,777 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 500 - Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "65A"
+2024-03-20 00:06:34,339 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 400 - Bad request

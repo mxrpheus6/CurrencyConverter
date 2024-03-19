@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ConversionHistoryRepository extends CrudRepository <ConversionHistory, Long> {
+public interface ConversionHistoryRepository extends CrudRepository<ConversionHistory, Long> {
 
-    @Query("SELECT ch FROM ConversionHistory ch WHERE ch.user.id = :userId")
+    //@Query("SELECT ch FROM ConversionHistory ch WHERE ch.user.id = :userId")
+    @Query(value = "SELECT * FROM conversion_history ch WHERE ch.user_id = :userId", nativeQuery = true)
     List<ConversionHistory> findConversionsByUserId(@Param("userId") Long userId);
 
 }

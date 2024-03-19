@@ -1,14 +1,13 @@
 package com.lab1.converter.service;
 
-import com.lab1.converter.dao.ConversionHistoryRepository;
 import com.lab1.converter.dao.CurrencyRepository;
 import com.lab1.converter.entity.Currency;
+import com.lab1.converter.exceptions.CurrencyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.lab1.converter.model.ExchangeRateApiResponseModel;
-
 
 @Service
 public class CurrencyService {
@@ -20,8 +19,10 @@ public class CurrencyService {
         this.currencyRepository = currencyRepository;
     }
 
-
     public Currency getCurrencyByCode(String code) {
+        if (!currencyRepository.existsByCodeIgnoreCase(code)) {
+            throw new CurrencyNotFoundException(code);
+        }
         return currencyRepository.findByCodeIgnoreCase(code);
     }
 

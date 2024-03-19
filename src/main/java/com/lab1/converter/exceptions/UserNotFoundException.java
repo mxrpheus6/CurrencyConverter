@@ -1,5 +1,7 @@
 package com.lab1.converter.exceptions;
 
-public class UserNotFoundException extends Exception {
-    public UserNotFoundException(String message) {super(message);}
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(Long id) {
+        super("User with id=" + id + " not found");
+    }
 }

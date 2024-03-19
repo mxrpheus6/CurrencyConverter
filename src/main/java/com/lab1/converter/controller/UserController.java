@@ -3,11 +3,15 @@ package com.lab1.converter.controller;
 import com.lab1.converter.cache.UserCache;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.User;
-import com.lab1.converter.exceptions.UserNotFoundException;
 import com.lab1.converter.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -22,39 +26,49 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public UserDTO createUser(@RequestBody User user) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
+        log.info("POST endpoint /users/create was called");
         UserDTO createdUser = userService.createUser(user);
         userCache.put(createdUser.getId().intValue(), createdUser);
-        return createdUser;
+        return ResponseEntity.ok(createdUser);
     }
 
     @GetMapping
-    public Iterable<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        log.info("GET endpoint /users was called");
+        List<UserDTO> userDTOList = userService.getAllUsers();
+        for (UserDTO userDTO: userDTOList) {
+            userCache.put(userDTO.getId().intValue(), userDTO);
+        }
+        return ResponseEntity.ok(userDTOList);
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        log.info("GET endpoint /users/{id} was called");
         if (userCache.contains(id.intValue())) {
-            return userCache.get(id.intValue());
+            return ResponseEntity.ok(userCache.get(id.intValue()));
         } else {
             UserDTO userDTO = userService.getUserById(id);
             userCache.put(userDTO.getId().intValue(), userDTO);
-            return userDTO;
+            return ResponseEntity.ok(userDTO);
         }
     }
 
     @PutMapping("/update/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody User updatedUser) throws UserNotFoundException {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        log.info("PUT endpoint /users/update/{id} was called");
         UserDTO updatedUserDTO = userService.updateUser(id, updatedUser);
         userCache.put(updatedUserDTO.getId().intValue(), updatedUserDTO);
-        return updatedUserDTO;
+        return ResponseEntity.ok(updatedUserDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable Long id) throws UserNotFoundException {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        log.info("DELETE endpoint /users/delete/{id} was called");
         userService.deleteUser(id);
         userCache.remove(id.intValue());
+        return ResponseEntity.ok("User with id=" + id + " was successfully deleted");
     }
 
 }

@@ -1,6 +1,5 @@
 package com.lab1.converter.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.User;
 
@@ -12,8 +11,7 @@ public class UserDTO {
     private String name;
     private String email;
 
-    @JsonIgnoreProperties("user")
-    private List<ConversionHistory> conversions = new ArrayList<>();
+    private List<ConversionHistoryBaseDTO> conversions = new ArrayList<>();
 
     public static UserDTO toModel(User user) {
         UserDTO model = new UserDTO();
@@ -22,10 +20,16 @@ public class UserDTO {
         model.setName(user.getName());
         model.setEmail(user.getEmail());
 
-        if (user.getConversions() != null) {
-            List<ConversionHistory> conversionsCopy = new ArrayList<>(user.getConversions());
-            model.setConversions(conversionsCopy);
+        List<ConversionHistory> conversionsCopy = user.getConversions();
+        List<ConversionHistoryBaseDTO> conversionsCopyBaseDTO = new ArrayList<>();
+
+        if (conversionsCopy != null) {
+            for (ConversionHistory conversion: conversionsCopy) {
+                 conversionsCopyBaseDTO.add(ConversionHistoryBaseDTO.toModel(conversion));
+            }
         }
+
+        model.setConversions(conversionsCopyBaseDTO);
 
         return model;
     }
@@ -63,11 +67,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public List<ConversionHistory> getConversions() {
+    public List<ConversionHistoryBaseDTO> getConversions() {
         return conversions;
     }
 
-    public void setConversions(List<ConversionHistory> conversions) {
+    public void setConversions(List<ConversionHistoryBaseDTO> conversions) {
         this.conversions = conversions;
     }
 }

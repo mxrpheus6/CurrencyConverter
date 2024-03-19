@@ -1,13 +1,11 @@
 package com.lab1.converter.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lab1.converter.entity.ConversionHistory;
 
 public class ConversionHistoryDTO {
     private Long id;
 
-    @JsonIgnoreProperties("conversions")
-    private UserDTO user;
+    private UserBaseDTO user;
 
     private String fromCurrency;
     private double amount;
@@ -18,7 +16,7 @@ public class ConversionHistoryDTO {
         ConversionHistoryDTO model = new ConversionHistoryDTO();
 
         model.setId(conversionHistory.getId());
-        model.setUser(UserDTO.toModel(conversionHistory.getUser()));
+        model.setUser(UserBaseDTO.toModel(conversionHistory.getUser()));
         model.setFromCurrency(conversionHistory.getFromCurrency());
         model.setAmount(conversionHistory.getAmount());
         model.setToCurrency(conversionHistory.getToCurrency());
@@ -35,11 +33,11 @@ public class ConversionHistoryDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
+    public UserBaseDTO getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(UserBaseDTO user) {
         this.user = user;
     }
 

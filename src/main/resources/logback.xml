@@ -1,0 +1,28 @@
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- Кконфигурация для записи в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/application.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%date %-5level --- %logger{36} : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Логгеры для контроллера и обработчика исключений -->
+    <logger name="com.lab1.converter.controller" level="INFO">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="com.lab1.converter.exceptions.GlobalExceptionHandler" level="INFO">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- Конфигурация для записи в консоль -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
