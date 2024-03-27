@@ -6,3 +6,6 @@
 2024-03-20 10:24:28,722 INFO  --- c.l.c.c.ConversionHistoryController : GET endpoint /conversions//convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency} was called
 2024-03-20 10:24:55,197 INFO  --- c.l.c.c.ConversionHistoryController : DELETE endpoint /conversions/delete/{id} was called
 2024-03-27 11:02:16,486 INFO  --- c.l.c.controller.CurrencyController : Currency rates are updated
+2024-03-27 11:07:22,427 INFO  --- c.l.c.controller.CurrencyController : Currency rates are updated
+2024-03-27 11:07:55,296 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 404 - No endpoint GET /abc.
+2024-03-27 11:08:00,511 INFO  --- c.l.c.controller.UserController : GET endpoint /users was called
