@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CurrencyTest {
+class CurrencyTest {
     @Test
     void testCurrencyGettersAndSetters() {
         Currency currency = new Currency();

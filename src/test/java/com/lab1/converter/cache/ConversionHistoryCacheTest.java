@@ -1,7 +1,6 @@
 package com.lab1.converter.cache;
 
 import com.lab1.converter.dto.ConversionHistoryDTO;
-import com.lab1.converter.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

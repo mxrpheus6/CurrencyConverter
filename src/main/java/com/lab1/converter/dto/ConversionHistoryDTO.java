@@ -16,7 +16,9 @@ public class ConversionHistoryDTO {
         ConversionHistoryDTO model = new ConversionHistoryDTO();
 
         model.setId(conversionHistory.getId());
-        model.setUser(UserBaseDTO.toModel(conversionHistory.getUser()));
+        if (conversionHistory.getUser() != null) {
+            model.setUser(UserBaseDTO.toModel(conversionHistory.getUser()));
+        }
         model.setFromCurrency(conversionHistory.getFromCurrency());
         model.setAmount(conversionHistory.getAmount());
         model.setToCurrency(conversionHistory.getToCurrency());
