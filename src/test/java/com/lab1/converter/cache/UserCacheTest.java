@@ -1,6 +1,5 @@
-package com.lab1.conerter.cache;
+package com.lab1.converter.cache;
 
-import com.lab1.converter.cache.UserCache;
 import com.lab1.converter.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
