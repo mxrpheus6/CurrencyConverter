@@ -21,18 +21,12 @@ public class ConversionHistoryController {
 
     private final ConversionHistoryService conversionHistoryService;
     private final ConversionHistoryCache conversionHistoryCache;
-    private final UserService userService;
-    private final CurrencyService currencyService;
 
     @Autowired
     public ConversionHistoryController(ConversionHistoryService currencyConverterService,
-                                       ConversionHistoryCache conversionHistoryCache,
-                                       CurrencyService currencyService,
-                                       UserService userService) {
+                                       ConversionHistoryCache conversionHistoryCache) {
         this.conversionHistoryService = currencyConverterService;
         this.conversionHistoryCache = conversionHistoryCache;
-        this.userService = userService;
-        this.currencyService = currencyService;
     }
 
     @PostMapping("/create")
