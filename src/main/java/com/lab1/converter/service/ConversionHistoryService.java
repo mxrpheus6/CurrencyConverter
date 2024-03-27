@@ -57,7 +57,9 @@ public class ConversionHistoryService {
             throw new ConversionNotFoundException(id);
         }
         updatedConversionHistory.setId(id);
-        return ConversionHistoryDTO.toModel(conversionHistoryRepository.save(updatedConversionHistory));
+        ConversionHistory savedConversion = conversionHistoryRepository.save(updatedConversionHistory); // Сохранение обновленной записи
+
+        return ConversionHistoryDTO.toModel(savedConversion);
     }
 
     public void deleteConversion(Long id)  {

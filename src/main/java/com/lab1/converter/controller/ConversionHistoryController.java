@@ -36,7 +36,7 @@ public class ConversionHistoryController {
         log.info("POST endpoint /conversions/create was called");
         ConversionHistoryDTO createdConversion = conversionHistoryService.createConversion(conversionHistory);
         conversionHistoryCache.put(conversionHistory.getId().intValue(), createdConversion);
-        return new ResponseEntity<>(conversionHistoryService.createConversion(conversionHistory), HttpStatus.OK);
+        return new ResponseEntity<>(createdConversion, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -73,7 +73,7 @@ public class ConversionHistoryController {
         log.info("PUT endpoint /conversions/update/{id} was called");
         ConversionHistoryDTO updatedConversionDTO = conversionHistoryService.updateConversion(id, conversionHistory);
         conversionHistoryCache.put(updatedConversionDTO.getId().intValue(), updatedConversionDTO);
-        return new ResponseEntity<>(updatedConversionDTO, HttpStatus.OK);
+        return new ResponseEntity<>(updatedConversionDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -81,7 +81,7 @@ public class ConversionHistoryController {
         log.info("DELETE endpoint /conversions/delete/{id} was called");
         conversionHistoryService.deleteConversion(id);
         conversionHistoryCache.remove(id.intValue());
-        return new ResponseEntity<>("Conversion with id=" + id + " was successfully deleted", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency}")
