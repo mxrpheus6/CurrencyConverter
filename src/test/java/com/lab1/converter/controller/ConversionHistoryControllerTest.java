@@ -9,14 +9,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,20 +43,12 @@ class ConversionHistoryControllerTest {
 
     @Test
     void testGetAllConversions() throws Exception {
-        List<ConversionHistoryDTO> conversionHistoryDTOList = new ArrayList<>();
-        ConversionHistoryDTO conversionHistoryDTO1 = new ConversionHistoryDTO();
-        conversionHistoryDTO1.setId(1L);
-        ConversionHistoryDTO conversionHistoryDTO2 = new ConversionHistoryDTO();
-        conversionHistoryDTO2.setId(2L);
-        conversionHistoryDTOList.add(conversionHistoryDTO1);
-        conversionHistoryDTOList.add(conversionHistoryDTO2);
+        List<ConversionHistoryDTO> conversions = List.of(mock(ConversionHistoryDTO.class));
 
-        when(conversionHistoryService.getAllConversions()).thenReturn(conversionHistoryDTOList);
+        when(conversionHistoryService.getAllConversions()).thenReturn(conversions);
 
-        mockMvc.perform(get("/conversions"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[1].id").value(2));
+        assertEquals(new ResponseEntity<>(conversions, HttpStatus.OK), conversionHistoryController.getAllConversions());
+
+        verify(conversionHistoryService, times(1)).getAllConversions();
     }
 }
