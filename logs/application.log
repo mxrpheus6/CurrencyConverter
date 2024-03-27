@@ -10,3 +10,5 @@
 2024-03-27 11:07:55,296 ERROR --- c.l.c.e.GlobalExceptionHandler : ERROR 404 - No endpoint GET /abc.
 2024-03-27 11:08:00,511 INFO  --- c.l.c.controller.UserController : GET endpoint /users was called
 2024-03-27 11:15:15,209 INFO  --- c.l.c.controller.CurrencyController : Currency rates are updated
+2024-03-27 11:24:57,516 INFO  --- c.l.c.controller.CurrencyController : Currency rates are updated
+2024-03-27 11:25:08,594 INFO  --- c.l.c.controller.UserController : GET endpoint /users was called
