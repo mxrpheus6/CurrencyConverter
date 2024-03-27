@@ -5,8 +5,7 @@ import com.lab1.converter.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ConversionHistoryCacheTest {
     private ConversionHistoryCache conversionHistoryCache;
@@ -34,6 +33,41 @@ class ConversionHistoryCacheTest {
         ConversionHistoryDTO retrievedConversionHistoryCache = conversionHistoryCache.get(key);
 
         assertNull(retrievedConversionHistoryCache);
+    }
+
+    @Test
+    void testContains() {
+        int key = 1;
+        ConversionHistoryDTO conversionHistoryDTO = new ConversionHistoryDTO();
+
+        conversionHistoryCache.put(key, conversionHistoryDTO);
+        boolean contains = conversionHistoryCache.contains(key);
+
+        assertTrue(contains);
+    }
+
+    @Test
+    void testSize() {
+        int key = 1;
+        ConversionHistoryDTO conversionHistoryDTO = new ConversionHistoryDTO();
+
+        conversionHistoryCache.put(key, conversionHistoryDTO);
+        int size = conversionHistoryCache.size();
+
+        assertEquals(1, size);
+    }
+
+    @Test
+    void testRemove() {
+        int key = 1;
+        ConversionHistoryDTO conversionHistoryDTO = new ConversionHistoryDTO();
+
+        conversionHistoryCache.put(key, conversionHistoryDTO);
+        conversionHistoryCache.remove(key);
+
+        ConversionHistoryDTO retrievedConversionHistoryDTO = conversionHistoryCache.get(key);
+
+        assertNull(retrievedConversionHistoryDTO);
     }
 
     @Test

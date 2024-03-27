@@ -8,7 +8,9 @@ import com.lab1.converter.service.CurrencyService;
 import com.lab1.converter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import com.lab1.converter.service.ConversionHistoryService;
 
@@ -34,7 +36,7 @@ public class ConversionHistoryController {
         log.info("POST endpoint /conversions/create was called");
         ConversionHistoryDTO createdConversion = conversionHistoryService.createConversion(conversionHistory);
         conversionHistoryCache.put(conversionHistory.getId().intValue(), createdConversion);
-        return ResponseEntity.ok(conversionHistoryService.createConversion(conversionHistory));
+        return new ResponseEntity<>(conversionHistoryService.createConversion(conversionHistory), HttpStatus.OK);
     }
 
     @GetMapping
@@ -44,24 +46,24 @@ public class ConversionHistoryController {
         for (ConversionHistoryDTO conversionDTO: conversionHistoryDTOList) {
             conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
         }
-        return ResponseEntity.ok(conversionHistoryDTOList);
+        return new ResponseEntity<>(conversionHistoryDTOList, HttpStatus.OK);
     }
 
     @GetMapping("user/{userId}")
     public ResponseEntity<List<ConversionHistoryBaseDTO>> getConversionsByUserId(@PathVariable Long userId) {
         log.info("GET endpoint /conversions/user/{userId} was called");
-        return ResponseEntity.ok(conversionHistoryService.getConversionsByUserId(userId));
+        return new ResponseEntity<>(conversionHistoryService.getConversionsByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ConversionHistoryDTO> getConversionById(@PathVariable Long id) {
         log.info("GET endpoint /conversions/{id} was called");
         if (conversionHistoryCache.contains(id.intValue())) {
-            return ResponseEntity.ok(conversionHistoryCache.get(id.intValue()));
+            return new ResponseEntity<>(conversionHistoryCache.get(id.intValue()), HttpStatus.OK);
         } else {
             ConversionHistoryDTO conversionDTO = conversionHistoryService.getConversionById(id);
             conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
-            return ResponseEntity.ok(conversionDTO);
+            return new ResponseEntity<>(conversionDTO, HttpStatus.OK);
         }
     }
 
@@ -71,7 +73,7 @@ public class ConversionHistoryController {
         log.info("PUT endpoint /conversions/update/{id} was called");
         ConversionHistoryDTO updatedConversionDTO = conversionHistoryService.updateConversion(id, conversionHistory);
         conversionHistoryCache.put(updatedConversionDTO.getId().intValue(), updatedConversionDTO);
-        return ResponseEntity.ok(updatedConversionDTO);
+        return new ResponseEntity<>(updatedConversionDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -79,7 +81,7 @@ public class ConversionHistoryController {
         log.info("DELETE endpoint /conversions/delete/{id} was called");
         conversionHistoryService.deleteConversion(id);
         conversionHistoryCache.remove(id.intValue());
-        return ResponseEntity.ok("Conversion with id=" + id + " was successfully deleted");
+        return new ResponseEntity<>("Conversion with id=" + id + " was successfully deleted", HttpStatus.OK);
     }
 
     @GetMapping("/convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency}")
@@ -92,6 +94,6 @@ public class ConversionHistoryController {
         ConversionHistoryDTO conversionDTO = ConversionHistoryDTO.toModel(conversion);
 
         conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
-        return ResponseEntity.ok(conversionDTO);
+        return new ResponseEntity<>(conversionDTO, HttpStatus.OK);
     }
 }
