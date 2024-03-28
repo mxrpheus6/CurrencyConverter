@@ -13,7 +13,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -76,6 +78,23 @@ class UserControllerTest {
         assertEquals(expectedResponse, actualResponse);
 
         verify(userService, times(1)).createUser(user);
+    }
+
+    @Test
+    void testCreateUsers() {
+        UserController userController = new UserController(userService, userCache);
+
+        List<User> userList = new ArrayList<>();
+        userList.add(new User());
+        userList.add(new User());
+
+        List<UserDTO> createdUserDTOList = new ArrayList<>();
+
+        when(userService.createUsers(userList)).thenReturn(createdUserDTOList);
+        ResponseEntity<List<UserDTO>> responseEntity = userController.createUsers(createdUserDTOList);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(createdUserDTOList.size(), responseEntity.getBody().size());
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.User;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
+import com.lab1.converter.model.ConversionResponseModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -185,4 +186,6 @@ class ConversionHistoryServiceTest {
 
         assertThrows(ConversionNotFoundException.class, () -> conversionHistoryService.deleteConversion(id));
     }
+
+
 }

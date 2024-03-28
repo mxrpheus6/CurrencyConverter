@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -32,6 +33,16 @@ public class UserController {
         UserDTO createdUser = userService.createUser(user);
         userCache.put(user.getId().intValue(), createdUser);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/create/many")
+    public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<UserDTO> userDTOs) {
+        log.info("POST endpoint /users/create/many was called");
+        List<User> users = userDTOs.stream()
+                .map(UserDTO::toEntity)
+                .toList();
+        List<UserDTO> createdUsers = userService.createUsers(users);
+        return new ResponseEntity<>(createdUsers, HttpStatus.CREATED);
     }
 
     @GetMapping

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserService {
@@ -22,6 +24,16 @@ public class UserService {
 
     public UserDTO createUser(User user) {
         return UserDTO.toModel(userRepository.save(user));
+    }
+
+    public List<UserDTO> createUsers(List<User> users) {
+        Iterable<User> savedUsersIterable = userRepository.saveAll(users);
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        StreamSupport.stream(savedUsersIterable.spliterator(), false)
+                .forEach(user -> userDTOList.add(UserDTO.toModel(user)));
+
+        return userDTOList;
     }
 
     public List<UserDTO> getAllUsers() {

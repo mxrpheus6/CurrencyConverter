@@ -22,9 +22,6 @@ class ConversionHistoryControllerTest {
     @Mock
     private ConversionHistoryService conversionHistoryService;
 
-    //@Mock
-    //private ConversionHistoryRepository conversionHistoryRepository;
-
     @Mock
     private ConversionHistoryCache conversionHistoryCache;
 
