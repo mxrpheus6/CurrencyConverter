@@ -1,7 +1,6 @@
 package com.lab1.converter.controller;
 
 import com.lab1.converter.cache.ConversionHistoryCache;
-import com.lab1.converter.dao.ConversionHistoryRepository;
 import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.entity.ConversionHistory;
