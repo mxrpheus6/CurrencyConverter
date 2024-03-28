@@ -26,14 +26,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ExceptionResponse handleMethodNotAllowed(Exception e) {
+    public ExceptionResponse handleMethodNotAllowedException(Exception e) {
         log.error("ERROR 405 - " + e.getMessage());
         return new ExceptionResponse(HttpStatus.METHOD_NOT_ALLOWED.value(), e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionResponse handleInternalServerError(RuntimeException e) {
+    public ExceptionResponse handleInternalServerErrorException(RuntimeException e) {
         log.error("ERROR 500 - " + e.getMessage());
         return new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
                        MethodArgumentNotValidException.class, MissingServletRequestParameterException.class,
                        ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionResponse handleInternalServerError(Exception e) {
+    public ExceptionResponse handleBadRequestException(Exception e) {
         log.error("ERROR 400 - Bad request");
         return new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), "Bad request");
     }

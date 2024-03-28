@@ -6,13 +6,14 @@ import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.entity.User;
 import com.lab1.converter.exceptions.ConversionNotFoundException;
-import com.lab1.converter.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,6 +68,28 @@ class ConversionHistoryServiceTest {
         when(conversionHistoryRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(ConversionNotFoundException.class, () -> conversionHistoryService.getConversionById(id));
+    }
+
+    @Test
+    void testGetAllConversions() {
+        List<ConversionHistory> conversionHistoryList = new ArrayList<>();
+        ConversionHistory conversionHistory1 = new ConversionHistory();
+        ConversionHistory conversionHistory2 = new ConversionHistory();
+
+        conversionHistory1.setId(1L);
+        conversionHistory2.setId(2L);
+
+        conversionHistoryList.add(conversionHistory1);
+        conversionHistoryList.add(conversionHistory2);
+
+        when(conversionHistoryRepository.findAll()).thenReturn(conversionHistoryList);
+
+        List<ConversionHistoryDTO> foundConversionHistoryList = conversionHistoryService.getAllConversions();
+
+        assertEquals(conversionHistoryList.size(), foundConversionHistoryList.size());
+        for (int i = 0; i < conversionHistoryList.size(); i++) {
+            assertEquals(conversionHistoryList.get(i).getId(), foundConversionHistoryList.get(i).getId());
+        }
     }
 
     @Test
