@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/conversions")
 public class ConversionHistoryController {
-
+    
     private final ConversionHistoryService conversionHistoryService;
     private final ConversionHistoryCache conversionHistoryCache;
 

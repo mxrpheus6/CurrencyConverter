@@ -23,8 +23,8 @@ class ConversionHistoryControllerTest {
     @Mock
     private ConversionHistoryService conversionHistoryService;
 
-    @Mock
-    private ConversionHistoryRepository conversionHistoryRepository;
+    //@Mock
+    //private ConversionHistoryRepository conversionHistoryRepository;
 
     @Mock
     private ConversionHistoryCache conversionHistoryCache;
@@ -90,7 +90,7 @@ class ConversionHistoryControllerTest {
     }
 
     @Test
-    void testUpdateCountryParameters() {
+    void testUpdateConversion() {
         ConversionHistoryController conversionHistoryController = new ConversionHistoryController(conversionHistoryService, conversionHistoryCache);
 
         Long id = 1L;
@@ -109,7 +109,7 @@ class ConversionHistoryControllerTest {
     }
 
     @Test
-    void testDeleteCountryParameters() {
+    void testDeleteConversion() {
         ConversionHistoryController conversionHistoryController = new ConversionHistoryController(conversionHistoryService,
                                                                                                   conversionHistoryCache);
         Long id = 1L;

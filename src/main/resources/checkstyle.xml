@@ -5,72 +5,73 @@
 
 <module name="Checker">
 
-    <property name="charset" value="UTF-8"/> <!--кодировка-->
+    <property name="fileExtensions" value="java, properties, xml"/>
 
-    <property name="fileExtensions" value="java, properties, xml"/> <!--расширения в проекте-->
+    <module name="FileLength"/>
 
-    <module name="FileLength"/> <!--макс кол-во строк в классе-->
+    <module name="TreeWalker">
 
-
-    <module name="DeclarationOrder"/> <!--порядок расположения элементов-->
-
-    <module name="EmptyLineSeparator"> <!-- Java Style Guide: Source file structure -->
-        <property name="tokens" value="
+        <module name="EmptyLineSeparator"> <!-- Java Style Guide: Source file structure -->
+            <property name="tokens" value="
             CLASS_DEF, ENUM_DEF, INTERFACE_DEF, CTOR_DEF, STATIC_INIT, INSTANCE_INIT, VARIABLE_DEF, METHOD_DEF"/>
-        <property name="allowNoEmptyLineBetweenFields" value="true"/>
-        <property name="allowMultipleEmptyLines" value="false"/>
-        <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
-    </module>
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+            <property name="allowMultipleEmptyLines" value="false"/>
+            <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+        </module>
 
-    <module name="ConstantName"/>
-    <module name="LocalVariableName"/>
-    <module name="MemberName"/>
-    <module name="MethodName"/>
-    <module name="PackageName">
-        <property name="format" value="^[a-z]+(\.[a-z0-9]*)*$"/>
-    </module>
-    <module name="ParameterName"/>
-    <module name="StaticVariableName"/>
-    <module name="TypeName"/>
+        <module name="ConstantName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z0-9]*)*$"/>
+        </module>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
 
-    <module name="MethodLength">
-        <property name="tokens" value="METHOD_DEF"/>
-        <property name="max" value="20"/>
-    </module>
-    <module name="ParameterNumber"/>
+        <module name="DeclarationOrder"/>
 
-    <module name="EmptyForIteratorPad"/>
-    <module name="GenericWhitespace"/>
-    <module name="MethodParamPad"/>
-    <module name="NoWhitespaceAfter"/>
-    <module name="NoWhitespaceBefore"/>
-    <module name="OperatorWrap"/>
-    <module name="ParenPad"/>
-    <module name="TypecastParenPad"/>
-    <module name="WhitespaceAfter"/>
-    <module name="WhitespaceAround"/>
+        <module name="MethodLength">
+            <property name="tokens" value="METHOD_DEF"/>
+            <property name="max" value="100"/>
+        </module>
+        <module name="ParameterNumber"/>
 
-    <module name="AvoidNestedBlocks"/>
-    <module name="LeftCurly"/>
-    <module name="NeedBraces"/>
-    <module name="RightCurly"/>
+        <module name="EmptyForIteratorPad"/>
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap"/>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
 
-    <module name="EmptyStatement"/>
-    <module name="EqualsHashCode"/>
-    <module name="IllegalInstantiation"/>
-    <module name="InnerAssignment"/>
-    <module name="MissingSwitchDefault"/>
-    <module name="SimplifyBooleanExpression"/>
-    <module name="SimplifyBooleanReturn"/>
 
-    <module name="InterfaceIsType"/>
+        <module name="AvoidNestedBlocks"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
 
-    <module name="ArrayTypeStyle"/>
-    <module name="TodoComment"/>
-    <module name="UpperEll"/>
-    <module name="EmptyBlock"/>
-    <module name="EmptyBlock">
-        <property name="tokens" value="LITERAL_CATCH"/>
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/>
+        <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
+        <module name="MissingSwitchDefault"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <module name="InterfaceIsType"/>
+
+        <module name="ArrayTypeStyle"/>
+        <module name="TodoComment"/>
+        <module name="UpperEll"/>
+        <module name="EmptyBlock"/>
+        <module name="EmptyBlock">
+            <property name="tokens" value="LITERAL_CATCH"/>
+        </module>
     </module>
 
 </module>

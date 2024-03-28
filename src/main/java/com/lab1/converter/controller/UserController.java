@@ -6,6 +6,7 @@ import com.lab1.converter.entity.User;
 import com.lab1.converter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,8 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         log.info("POST endpoint /users/create was called");
         UserDTO createdUser = userService.createUser(user);
-        userCache.put(createdUser.getId().intValue(), createdUser);
-        return ResponseEntity.ok(createdUser);
+        userCache.put(user.getId().intValue(), createdUser);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -40,18 +41,18 @@ public class UserController {
         for (UserDTO userDTO: userDTOList) {
             userCache.put(userDTO.getId().intValue(), userDTO);
         }
-        return ResponseEntity.ok(userDTOList);
+        return new ResponseEntity<>(userDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         log.info("GET endpoint /users/{id} was called");
         if (userCache.contains(id.intValue())) {
-            return ResponseEntity.ok(userCache.get(id.intValue()));
+            return new ResponseEntity<>(userCache.get(id.intValue()), HttpStatus.OK);
         } else {
             UserDTO userDTO = userService.getUserById(id);
             userCache.put(userDTO.getId().intValue(), userDTO);
-            return ResponseEntity.ok(userDTO);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
     }
 
@@ -60,7 +61,7 @@ public class UserController {
         log.info("PUT endpoint /users/update/{id} was called");
         UserDTO updatedUserDTO = userService.updateUser(id, updatedUser);
         userCache.put(updatedUserDTO.getId().intValue(), updatedUserDTO);
-        return ResponseEntity.ok(updatedUserDTO);
+        return new ResponseEntity<>(updatedUserDTO, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -68,7 +69,7 @@ public class UserController {
         log.info("DELETE endpoint /users/delete/{id} was called");
         userService.deleteUser(id);
         userCache.remove(id.intValue());
-        return ResponseEntity.ok("User with id=" + id + " was successfully deleted");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
