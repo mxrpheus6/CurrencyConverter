@@ -12,9 +12,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
@@ -53,5 +53,66 @@ class UserServiceTest {
         when(userRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(id));
+    }
+
+    @Test
+    void testCreateUser() {
+        Long id = 1L;
+        User user = new User();
+        user.setId(id);
+        user.setName("Pablo");
+        user.setEmail("golf@example.com");
+
+        when(userRepository.save(any())).thenReturn(user);
+
+        UserDTO createdUser = userService.createUser(user);
+
+        assertEquals(user.getId(), createdUser.getId());
+        assertEquals(user.getName(), createdUser.getName());
+        assertEquals(user.getEmail(), createdUser.getEmail());
+    }
+
+    @Test
+    void testUpdateUser() {
+        Long id = 1L;
+        User user = new User();
+        user.setId(id);
+
+        when(userRepository.existsById(id)).thenReturn(true);
+        when(userRepository.save(any())).thenReturn(user);
+
+        UserDTO updatedUser = userService.updateUser(id, user);
+
+        assertEquals(user.getId(), updatedUser.getId());
+    }
+
+    @Test
+    void testUpdateUser_UserNotFound() {
+        Long id = 1L;
+        User user = new User();
+
+        when(userRepository.existsById(id)).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(id, user));
+    }
+
+    @Test
+    void testDeleteUser() {
+        Long id = 1L;
+
+        when(userRepository.existsById(id)).thenReturn(true);
+
+        userService.deleteUser(id);
+
+        verify(userRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testDeleteUser_UserNotFound() {
+        Long id = 1L;
+
+        when(userRepository.existsById(id)).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
     }
 }
