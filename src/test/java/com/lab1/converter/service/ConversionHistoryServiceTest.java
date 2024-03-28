@@ -1,6 +1,7 @@
 package com.lab1.converter.service;
 
 import com.lab1.converter.dao.ConversionHistoryRepository;
+import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.ConversionHistory;
@@ -52,13 +53,40 @@ class ConversionHistoryServiceTest {
 
         when(conversionHistoryRepository.findById(id)).thenReturn(Optional.of(conversionHistory));
 
-        ConversionHistoryDTO conversionDTO = conversionHistoryService.getConversionById(id);
+        ConversionHistoryDTO conversionHistoryDTO = conversionHistoryService.getConversionById(id);
 
-        assertEquals(conversionHistory.getId(), conversionDTO.getId());
-        assertEquals(conversionHistory.getFromCurrency(), conversionDTO.getFromCurrency());
-        assertEquals(conversionHistory.getAmount(), conversionDTO.getAmount());
-        assertEquals(conversionHistory.getToCurrency(), conversionDTO.getToCurrency());
-        assertEquals(conversionHistory.getConvertedAmount(), conversionDTO.getConvertedAmount());
+        assertEquals(conversionHistory.getId(), conversionHistoryDTO.getId());
+        assertEquals(conversionHistory.getFromCurrency(), conversionHistoryDTO.getFromCurrency());
+        assertEquals(conversionHistory.getAmount(), conversionHistoryDTO.getAmount());
+        assertEquals(conversionHistory.getToCurrency(), conversionHistoryDTO.getToCurrency());
+        assertEquals(conversionHistory.getConvertedAmount(), conversionHistoryDTO.getConvertedAmount());
+    }
+
+    @Test
+    void testGetConversionsByUserId() {
+        Long userId = 1L;
+
+        List<ConversionHistory> conversionHistoryList = new ArrayList<>();
+        ConversionHistory conversionHistory1 = new ConversionHistory();
+        ConversionHistory conversionHistory2 = new ConversionHistory();
+
+        User user = new User();
+        user.setId(userId);
+
+        conversionHistory1.setUser(user);
+        conversionHistory2.setUser(user);
+
+        conversionHistoryList.add(conversionHistory1);
+        conversionHistoryList.add(conversionHistory2);
+
+        when(conversionHistoryRepository.findConversionsByUserId(userId)).thenReturn(conversionHistoryList);
+
+        List<ConversionHistoryBaseDTO> result = conversionHistoryService.getConversionsByUserId(userId);
+
+        assertEquals(conversionHistoryList.size(), result.size());
+        for (int i = 0; i < conversionHistoryList.size(); i++) {
+            assertEquals(conversionHistoryList.get(i).getId(), result.get(i).getId());
+        }
     }
 
     @Test
@@ -84,11 +112,11 @@ class ConversionHistoryServiceTest {
 
         when(conversionHistoryRepository.findAll()).thenReturn(conversionHistoryList);
 
-        List<ConversionHistoryDTO> foundConversionHistoryList = conversionHistoryService.getAllConversions();
+        List<ConversionHistoryDTO> foundConversionHistoryDTOList = conversionHistoryService.getAllConversions();
 
-        assertEquals(conversionHistoryList.size(), foundConversionHistoryList.size());
+        assertEquals(conversionHistoryList.size(), foundConversionHistoryDTOList.size());
         for (int i = 0; i < conversionHistoryList.size(); i++) {
-            assertEquals(conversionHistoryList.get(i).getId(), foundConversionHistoryList.get(i).getId());
+            assertEquals(conversionHistoryList.get(i).getId(), foundConversionHistoryDTOList.get(i).getId());
         }
     }
 
@@ -104,13 +132,13 @@ class ConversionHistoryServiceTest {
 
         when(conversionHistoryRepository.save(any())).thenReturn(conversionHistory);
 
-        ConversionHistoryDTO createdConversion = conversionHistoryService.createConversion(conversionHistory);
+        ConversionHistoryDTO createdConversionHistory = conversionHistoryService.createConversion(conversionHistory);
 
-        assertEquals(conversionHistory.getId(), createdConversion.getId());
-        assertEquals(conversionHistory.getFromCurrency(), createdConversion.getFromCurrency());
-        assertEquals(conversionHistory.getAmount(), createdConversion.getAmount());
-        assertEquals(conversionHistory.getToCurrency(), createdConversion.getToCurrency());
-        assertEquals(conversionHistory.getConvertedAmount(), createdConversion.getConvertedAmount());
+        assertEquals(conversionHistory.getId(), createdConversionHistory.getId());
+        assertEquals(conversionHistory.getFromCurrency(), createdConversionHistory.getFromCurrency());
+        assertEquals(conversionHistory.getAmount(), createdConversionHistory.getAmount());
+        assertEquals(conversionHistory.getToCurrency(), createdConversionHistory.getToCurrency());
+        assertEquals(conversionHistory.getConvertedAmount(), createdConversionHistory.getConvertedAmount());
     }
 
     @Test
@@ -122,9 +150,9 @@ class ConversionHistoryServiceTest {
         when(conversionHistoryRepository.existsById(id)).thenReturn(true);
         when(conversionHistoryRepository.save(any())).thenReturn(conversionHistory);
 
-        ConversionHistoryDTO updatedConversion = conversionHistoryService.updateConversion(id, conversionHistory);
+        ConversionHistoryDTO updatedConversionHistory = conversionHistoryService.updateConversion(id, conversionHistory);
 
-        assertEquals(conversionHistory.getId(), updatedConversion.getId());
+        assertEquals(conversionHistory.getId(), updatedConversionHistory.getId());
     }
 
     @Test
