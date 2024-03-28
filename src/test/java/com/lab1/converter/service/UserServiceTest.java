@@ -97,6 +97,20 @@ class UserServiceTest {
     }
 
     @Test
+    void testCreateUsers() {
+        List<User> userList = new ArrayList<>();
+
+        List<User> expectedUserList = new ArrayList<>();
+
+        when(userRepository.saveAll(userList)).thenReturn(expectedUserList);
+
+        List<UserDTO> createdUserDTOs = userService.createUsers(userList);
+
+        assertEquals(expectedUserList.size(), createdUserDTOs.size());
+
+    }
+
+    @Test
     void testUpdateUser() {
         Long id = 1L;
         User user = new User();
