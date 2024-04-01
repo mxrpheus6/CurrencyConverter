@@ -36,12 +36,10 @@ public class UserController {
     }
 
     @PostMapping("/create/many")
-    public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<UserDTO> userDTOs) {
+    public ResponseEntity<List<UserDTO>> createUsers(@RequestBody List<User> userList) {
         log.info("POST endpoint /users/create/many was called");
-        List<User> users = userDTOs.stream()
-                .map(UserDTO::toEntity)
-                .toList();
-        List<UserDTO> createdUsers = userService.createUsers(users);
+
+        List<UserDTO> createdUsers = userService.createUsers(userList);
         return new ResponseEntity<>(createdUsers, HttpStatus.CREATED);
     }
 

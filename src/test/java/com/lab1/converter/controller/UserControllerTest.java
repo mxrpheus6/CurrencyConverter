@@ -89,9 +89,12 @@ class UserControllerTest {
         userList.add(new User());
 
         List<UserDTO> createdUserDTOList = new ArrayList<>();
+        createdUserDTOList.add(new UserDTO());
+        createdUserDTOList.add(new UserDTO());
 
         when(userService.createUsers(userList)).thenReturn(createdUserDTOList);
-        ResponseEntity<List<UserDTO>> responseEntity = userController.createUsers(createdUserDTOList);
+
+        ResponseEntity<List<UserDTO>> responseEntity = userController.createUsers(userList);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(createdUserDTOList.size(), responseEntity.getBody().size());
