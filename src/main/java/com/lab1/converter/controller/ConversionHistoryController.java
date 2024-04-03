@@ -4,13 +4,11 @@ import com.lab1.converter.cache.ConversionHistoryCache;
 import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.entity.ConversionHistory;
-import com.lab1.converter.service.CurrencyService;
-import com.lab1.converter.service.UserService;
+import com.lab1.converter.service.RequestCounterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import com.lab1.converter.service.ConversionHistoryService;
 
@@ -23,17 +21,20 @@ public class ConversionHistoryController {
     
     private final ConversionHistoryService conversionHistoryService;
     private final ConversionHistoryCache conversionHistoryCache;
+    private final RequestCounterService requestCounterService;
 
     @Autowired
     public ConversionHistoryController(ConversionHistoryService currencyConverterService,
-                                       ConversionHistoryCache conversionHistoryCache) {
+                                       ConversionHistoryCache conversionHistoryCache,
+                                       RequestCounterService requestCounterService) {
         this.conversionHistoryService = currencyConverterService;
         this.conversionHistoryCache = conversionHistoryCache;
+        this.requestCounterService = requestCounterService;
     }
 
     @PostMapping("/create")
     public ResponseEntity<ConversionHistoryDTO> createConversion(@RequestBody ConversionHistory conversionHistory) {
-        log.info("POST endpoint /conversions/create was called");
+        log.info("POST endpoint /conversions/create - " + requestCounterService.incrementAndGet());
         ConversionHistoryDTO createdConversion = conversionHistoryService.createConversion(conversionHistory);
         conversionHistoryCache.put(conversionHistory.getId().intValue(), createdConversion);
         return new ResponseEntity<>(createdConversion, HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class ConversionHistoryController {
 
     @GetMapping
     public ResponseEntity<List<ConversionHistoryDTO>> getAllConversions() {
-        log.info("GET endpoint /conversions was called");
+        log.info("GET endpoint /conversions" + requestCounterService.incrementAndGet());
         List<ConversionHistoryDTO> conversionHistoryDTOList = conversionHistoryService.getAllConversions();
         for (ConversionHistoryDTO conversionDTO: conversionHistoryDTOList) {
             conversionHistoryCache.put(conversionDTO.getId().intValue(), conversionDTO);
@@ -51,13 +52,13 @@ public class ConversionHistoryController {
 
     @GetMapping("user/{userId}")
     public ResponseEntity<List<ConversionHistoryBaseDTO>> getConversionsByUserId(@PathVariable Long userId) {
-        log.info("GET endpoint /conversions/user/{userId} was called");
+        log.info("GET endpoint /conversions/user/{userId}" + requestCounterService.incrementAndGet());
         return new ResponseEntity<>(conversionHistoryService.getConversionsByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ConversionHistoryDTO> getConversionById(@PathVariable Long id) {
-        log.info("GET endpoint /conversions/{id} was called");
+        log.info("GET endpoint /conversions/{id}" + requestCounterService.incrementAndGet());
         if (conversionHistoryCache.contains(id.intValue())) {
             return new ResponseEntity<>(conversionHistoryCache.get(id.intValue()), HttpStatus.OK);
         } else {
@@ -70,7 +71,7 @@ public class ConversionHistoryController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ConversionHistoryDTO> updateConversion(@PathVariable Long id,
                                                                  @RequestBody ConversionHistory conversionHistory) {
-        log.info("PUT endpoint /conversions/update/{id} was called");
+        log.info("PUT endpoint /conversions/update/{id}" + requestCounterService.incrementAndGet());
         ConversionHistoryDTO updatedConversionDTO = conversionHistoryService.updateConversion(id, conversionHistory);
         conversionHistoryCache.put(updatedConversionDTO.getId().intValue(), updatedConversionDTO);
         return new ResponseEntity<>(updatedConversionDTO, HttpStatus.CREATED);
@@ -78,7 +79,7 @@ public class ConversionHistoryController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteConversion(@PathVariable Long id)  {
-        log.info("DELETE endpoint /conversions/delete/{id} was called");
+        log.info("DELETE endpoint /conversions/delete/{id}" + requestCounterService.incrementAndGet());
         conversionHistoryService.deleteConversion(id);
         conversionHistoryCache.remove(id.intValue());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -89,7 +90,9 @@ public class ConversionHistoryController {
                                            @PathVariable String fromCurrency,
                                            @PathVariable double amount,
                                            @PathVariable String toCurrency) {
-        log.info("GET endpoint /conversions//convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency} was called");
+        log.info("GET endpoint /conversions/convert/user/{userId}/from/{fromCurrency}/amount/{amount}/to/{toCurrency}"
+                + requestCounterService.incrementAndGet());
+
         ConversionHistory conversion = conversionHistoryService.convertCurrency(userId, fromCurrency, amount, toCurrency);
         ConversionHistoryDTO conversionDTO = ConversionHistoryDTO.toModel(conversion);
 

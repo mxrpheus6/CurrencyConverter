@@ -5,6 +5,7 @@ import com.lab1.converter.dto.ConversionHistoryBaseDTO;
 import com.lab1.converter.dto.ConversionHistoryDTO;
 import com.lab1.converter.entity.ConversionHistory;
 import com.lab1.converter.service.ConversionHistoryService;
+import com.lab1.converter.service.RequestCounterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +25,9 @@ class ConversionHistoryControllerTest {
 
     @Mock
     private ConversionHistoryCache conversionHistoryCache;
+
+    @Mock
+    private RequestCounterService requestCounterService;
 
     @InjectMocks
     private ConversionHistoryController conversionHistoryController;
@@ -87,7 +91,9 @@ class ConversionHistoryControllerTest {
 
     @Test
     void testUpdateConversion() {
-        ConversionHistoryController conversionHistoryController = new ConversionHistoryController(conversionHistoryService, conversionHistoryCache);
+        ConversionHistoryController conversionHistoryController = new ConversionHistoryController(conversionHistoryService,
+                                                                                                  conversionHistoryCache,
+                                                                                                  requestCounterService);
 
         Long id = 1L;
 
@@ -107,7 +113,8 @@ class ConversionHistoryControllerTest {
     @Test
     void testDeleteConversion() {
         ConversionHistoryController conversionHistoryController = new ConversionHistoryController(conversionHistoryService,
-                                                                                                  conversionHistoryCache);
+                                                                                                  conversionHistoryCache,
+                                                                                                  requestCounterService);
         Long id = 1L;
 
         ResponseEntity<String> expectedResponse = new ResponseEntity<>(HttpStatus.NO_CONTENT);

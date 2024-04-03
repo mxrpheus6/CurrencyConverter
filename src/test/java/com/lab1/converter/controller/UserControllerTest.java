@@ -4,6 +4,7 @@ import com.lab1.converter.cache.UserCache;
 import com.lab1.converter.dao.UserRepository;
 import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.User;
+import com.lab1.converter.service.RequestCounterService;
 import com.lab1.converter.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class UserControllerTest {
     private UserCache userCache;
 
     @Mock
-    private UserRepository userRepository;
+    private RequestCounterService requestCounterService;
 
     @InjectMocks
     private UserController userController;
@@ -82,7 +83,7 @@ class UserControllerTest {
 
     @Test
     void testCreateUsers() {
-        UserController userController = new UserController(userService, userCache);
+        UserController userController = new UserController(userService, userCache, requestCounterService);
 
         List<User> userList = new ArrayList<>();
         userList.add(new User());
@@ -102,7 +103,7 @@ class UserControllerTest {
 
     @Test
     void testUpdateUserParameters() {
-        UserController userController = new UserController(userService, userCache);
+        UserController userController = new UserController(userService, userCache, requestCounterService);
 
         Long id = 1L;
 
@@ -121,7 +122,7 @@ class UserControllerTest {
 
     @Test
     void testDeleteUser() {
-        UserController userController = new UserController(userService, userCache);
+        UserController userController = new UserController(userService, userCache, requestCounterService);
         Long id = 1L;
 
         ResponseEntity<String> expectedResponse = new ResponseEntity<>(HttpStatus.NO_CONTENT);
