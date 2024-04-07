@@ -2,7 +2,6 @@ package com.lab1.converter.service;
 
 import com.lab1.converter.dao.CurrencyRepository;
 import com.lab1.converter.dto.CurrencyDTO;
-import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.Currency;
 import com.lab1.converter.exceptions.CurrencyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
