@@ -15,12 +15,14 @@ class ConversionHistoryBaseDTOTest {
         conversionHistoryBaseDTO.setAmount(1000.0);
         conversionHistoryBaseDTO.setToCurrency("BYN");
         conversionHistoryBaseDTO.setConvertedAmount(3250.0);
+        conversionHistoryBaseDTO.setDate("2024");
 
         assertEquals(1L, conversionHistoryBaseDTO.getId());
         assertEquals("USD", conversionHistoryBaseDTO.getFromCurrency());
         assertEquals(1000.0, conversionHistoryBaseDTO.getAmount());
         assertEquals("BYN", conversionHistoryBaseDTO.getToCurrency());
         assertEquals(3250.0, conversionHistoryBaseDTO.getConvertedAmount());
+        assertEquals("2024", conversionHistoryBaseDTO.getDate());
     }
 
     @Test
@@ -31,6 +33,7 @@ class ConversionHistoryBaseDTOTest {
         conversionHistory.setAmount(1000.0);
         conversionHistory.setToCurrency("BYN");
         conversionHistory.setConvertedAmount(3250.0);
+        conversionHistory.setDate("2024");
 
         ConversionHistoryBaseDTO conversionHistoryBaseDTO = ConversionHistoryBaseDTO.toModel(conversionHistory);
 
@@ -39,5 +42,6 @@ class ConversionHistoryBaseDTOTest {
         assertEquals(1000.0, conversionHistoryBaseDTO.getAmount());
         assertEquals("BYN", conversionHistoryBaseDTO.getToCurrency());
         assertEquals(3250.0, conversionHistoryBaseDTO.getConvertedAmount());
+        assertEquals("2024", conversionHistory.getDate());
     }
 }
