@@ -22,6 +22,8 @@ public class ConversionHistory {
 
     private double convertedAmount;
 
+    private String date;
+
     public User getUser() {
         return user;
     }
@@ -68,5 +70,13 @@ public class ConversionHistory {
 
     public void setConvertedAmount(double convertedAmount) {
         this.convertedAmount = convertedAmount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

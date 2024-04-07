@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +97,12 @@ public class ConversionHistoryService {
         conversionHistory.setAmount(amount);
         conversionHistory.setToCurrency(toCurrency.toUpperCase());
         conversionHistory.setConvertedAmount(response.getConversionResult());
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String dateTimeString = currentDateTime.format(formatter);
+        conversionHistory.setDate(dateTimeString);
+
         conversionHistoryRepository.save(conversionHistory);
         return conversionHistory;
     }

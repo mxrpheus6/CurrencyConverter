@@ -17,6 +17,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/conversions")
+@CrossOrigin
 public class ConversionHistoryController {
     
     private final ConversionHistoryService conversionHistoryService;

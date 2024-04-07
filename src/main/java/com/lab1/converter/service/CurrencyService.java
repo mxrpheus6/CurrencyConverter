@@ -1,6 +1,8 @@
 package com.lab1.converter.service;
 
 import com.lab1.converter.dao.CurrencyRepository;
+import com.lab1.converter.dto.CurrencyDTO;
+import com.lab1.converter.dto.UserDTO;
 import com.lab1.converter.entity.Currency;
 import com.lab1.converter.exceptions.CurrencyNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.lab1.converter.model.ExchangeRateApiResponseModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CurrencyService {
@@ -24,6 +29,12 @@ public class CurrencyService {
             throw new CurrencyNotFoundException(code);
         }
         return currencyRepository.findByCodeIgnoreCase(code);
+    }
+
+    public List<CurrencyDTO> getAllCurrencies() {
+        List<CurrencyDTO> currencyDTOList = new ArrayList<>();
+        currencyRepository.findAll().forEach(currency -> currencyDTOList.add(CurrencyDTO.toModel(currency)));
+        return currencyDTOList;
     }
 
     public void fetchAndSaveCurrencyRates() {

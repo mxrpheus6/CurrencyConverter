@@ -8,6 +8,7 @@ public class ConversionHistoryBaseDTO {
     private double amount;
     private String toCurrency;
     private double convertedAmount;
+    private String date;
 
     public static ConversionHistoryBaseDTO toModel(ConversionHistory conversionHistory) {
         ConversionHistoryBaseDTO model = new ConversionHistoryBaseDTO();
@@ -17,6 +18,7 @@ public class ConversionHistoryBaseDTO {
         model.setAmount(conversionHistory.getAmount());
         model.setToCurrency(conversionHistory.getToCurrency());
         model.setConvertedAmount(conversionHistory.getConvertedAmount());
+        model.setDate(conversionHistory.getDate());
 
         return model;
     }
@@ -59,5 +61,13 @@ public class ConversionHistoryBaseDTO {
 
     public void setConvertedAmount(double convertedAmount) {
         this.convertedAmount = convertedAmount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
